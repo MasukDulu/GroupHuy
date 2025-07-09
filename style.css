@@ -1,0 +1,1039 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from { 
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from { 
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes checkmark {
+    0% { stroke-dashoffset: 50; }
+    100% { stroke-dashoffset: 0; }
+}
+
+@keyframes fill {
+    0% { box-shadow: inset 0 0 0 100px #fff; }
+    100% { box-shadow: inset 0 0 0 0 #fff; }
+}
+
+@keyframes scale {
+    0%, 100% { transform: none; }
+    50% { transform: scale3d(1.1, 1.1, 1); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+}
+
+.animate-slide-right {
+    animation: slideInRight 0.5s ease-out;
+}
+
+.animate-slide-left {
+    animation: slideInLeft 0.5s ease-out;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.user-btn {
+    background-color: #4a6bff;
+    color: white;
+}
+
+.admin-btn {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+.send-btn {
+    background-color: #4a6bff;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding: 0;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: #4a6bff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.icon-btn:hover {
+    transform: scale(1.1);
+}
+
+.rotate {
+    animation: rotate 0.5s linear;
+}
+
+.save-btn {
+    background-color: #51cf66;
+    color: white;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.logout-btn {
+    background-color: #ff6b6b;
+    color: white;
+    padding: 8px 15px;
+    font-size: 14px;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: #ff6b6b;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.2s;
+}
+
+.delete-btn:hover {
+    transform: scale(1.1);
+}
+
+.ban-btn {
+    background-color: #ff6b6b;
+    color: white;
+    padding: 8px 15px;
+    font-size: 14px;
+}
+
+.cancel-btn {
+    background-color: #adb5bd;
+    color: white;
+    padding: 8px 15px;
+    font-size: 14px;
+}
+
+.action-btn {
+    background: none;
+    border: 1px solid #ddd;
+    color: #555;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-left: 5px;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background-color: #f8f9fa;
+}
+
+.action-btn i {
+    margin-right: 3px;
+}
+
+.delete-account-btn {
+    background: none;
+    border: none;
+    color: #ff6b6b;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: all 0.2s;
+}
+
+.delete-account-btn:hover {
+    background-color: rgba(255, 107, 107, 0.1);
+}
+
+/* Landing Page */
+.landing-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+.landing-content {
+    max-width: 600px;
+    padding: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.landing-content h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.landing-content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.landing-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Modals */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.modal-content input, 
+.modal-content select, 
+.modal-content textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus {
+    outline: none;
+    border-color: #4a6bff;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+/* Loading Screen */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    flex-direction: column;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #4a6bff;
+    border-radius: 50%;
+    animation: rotate 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+.loading-dots {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.loading-dots div {
+    width: 15px;
+    height: 15px;
+    margin: 0 5px;
+    background-color: #4a6bff;
+    border-radius: 50%;
+    animation: bounce 0.6s infinite alternate;
+}
+
+.loading-dots div:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loading-dots div:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.loading-content p {
+    color: #4a6bff;
+    font-weight: 500;
+}
+
+/* Chat Interface */
+.user-container, .admin-container {
+    max-width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.chat-interface {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-image: url('bgchat.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.chat-header {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
+}
+
+.header-content h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.header-content p {
+    font-size: 0.8rem;
+    color: #51cf66;
+    font-weight: 500;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: rgba(245, 247, 250, 0.8);
+    transition: all 0.3s;
+}
+
+.chat-messages.refreshing {
+    opacity: 0.5;
+}
+
+.message {
+    max-width: 80%;
+    padding: 12px 15px;
+    border-radius: 15px;
+    animation: fadeIn 0.5s ease-out;
+    position: relative;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.message.sent {
+    align-self: flex-end;
+    background-color: #4a6bff;
+    color: white;
+    border-bottom-right-radius: 5px;
+    animation-name: slideInLeft;
+}
+
+.message.received {
+    align-self: flex-start;
+    background-color: white;
+    color: #333;
+    border-bottom-left-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    animation-name: slideInRight;
+}
+
+.deleted-message {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #999;
+    max-width: 60%;
+    margin: 5px auto;
+    text-align: center;
+    border-radius: 10px;
+    padding: 8px 15px;
+}
+
+.deleted-text {
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.deleted-text i {
+    margin-right: 5px;
+    color: #ff6b6b;
+}
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.message-sender {
+    font-weight: 600;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+}
+
+.message.sent .message-sender {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.message.received .message-sender {
+    color: #4a6bff;
+}
+
+.message-text {
+    word-wrap: break-word;
+}
+
+.message-time {
+    font-size: 0.7rem;
+    margin-top: 5px;
+    text-align: right;
+    opacity: 0.7;
+}
+
+.message-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.message-input-container {
+    padding: 15px 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.message-input-container input {
+    flex: 1;
+    padding: 12px 20px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.message-input-container input:focus {
+    outline: none;
+    border-color: #4a6bff;
+    box-shadow: 0 0 0 2px rgba(74, 107, 255, 0.2);
+}
+
+/* Admin Dashboard */
+.admin-dashboard {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.admin-header {
+    background-color: #4a6bff;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.admin-nav {
+    display: flex;
+    background-color: white;
+    border-bottom: 1px solid #eee;
+    overflow-x: auto;
+}
+
+.nav-btn {
+    flex: 1;
+    padding: 15px 10px;
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    min-width: 100px;
+}
+
+.nav-btn i {
+    font-size: 18px;
+}
+
+.nav-btn.active {
+    color: #4a6bff;
+    border-bottom: 3px solid #4a6bff;
+}
+
+.nav-btn:hover {
+    background-color: rgba(74, 107, 255, 0.1);
+}
+
+.admin-content {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.content-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    overflow-y: auto;
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Admin Chat Section */
+.admin-chat-messages {
+    height: calc(100% - 70px);
+    overflow-y: auto;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.admin-message {
+    background-color: white;
+    padding: 12px 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    opacity: 0;
+    animation-fill-mode: forwards;
+    animation-name: fadeIn;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.admin-chat-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.admin-chat-controls input {
+    flex: 1;
+    padding: 12px 20px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    font-size: 16px;
+}
+
+/* Settings Section */
+.settings-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.radio-group input {
+    width: auto;
+}
+
+/* Accounts Section */
+.accounts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.search-box {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+    max-width: 300px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px 15px 10px 35px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    font-size: 14px;
+}
+
+.search-box i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+.accounts-stats {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    flex: 1;
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stat-card h4 {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.stat-card p {
+    font-size: 24px;
+    font-weight: 600;
+    color: #4a6bff;
+}
+
+.accounts-list {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.account-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+}
+
+.account-item:last-child {
+    border-bottom: none;
+}
+
+.account-item:hover {
+    background-color: #f9f9f9;
+}
+
+.account-item.banned {
+    background-color: rgba(255, 107, 107, 0.05);
+}
+
+.account-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f0f2f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4a6bff;
+}
+
+.account-item.banned .user-avatar {
+    color: #ff6b6b;
+}
+
+.user-details h4 {
+    font-size: 16px;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+}
+
+.banned-badge {
+    background-color: #ff6b6b;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 8px;
+}
+
+.user-details p {
+    font-size: 12px;
+    color: #999;
+}
+
+.account-actions {
+    display: flex;
+    gap: 5px;
+}
+
+/* Ban Page Styles */
+.ban-container {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+.ban-content {
+    max-width: 500px;
+    width: 90%;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.ban-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.ban-info {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.ban-info p {
+    margin-bottom: 10px;
+}
+
+.ban-actions {
+    margin-top: 20px;
+}
+
+.countdown {
+    font-size: 1.2rem;
+    margin: 20px 0;
+}
+
+/* Success Notification */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(200%);
+    transition: transform 0.3s ease;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.success-animation {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+}
+
+.checkmark {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 4;
+    stroke: #4CAF50;
+    stroke-miterlimit: 10;
+    box-shadow: inset 0px 0px 0px #4CAF50;
+    animation: fill 0.4s ease-in-out 0.4s forwards, scale 0.3s ease-in-out 0.9s both;
+}
+
+.checkmark-circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 4;
+    stroke-miterlimit: 10;
+    stroke: #4CAF50;
+    fill: none;
+    animation: checkmark 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark-check {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: checkmark 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .landing-content {
+        padding: 30px 20px;
+    }
+    
+    .landing-content h1 {
+        font-size: 2.2rem;
+    }
+    
+    .landing-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .message {
+        max-width: 90%;
+    }
+    
+    .admin-nav {
+        justify-content: flex-start;
+    }
+    
+    .nav-btn {
+        min-width: auto;
+        padding: 15px;
+    }
+    
+    .accounts-stats {
+        flex-direction: column;
+    }
+    
+    .account-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .account-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        width: 95%;
+        padding: 20px 15px;
+    }
+    
+    .chat-header {
+        padding: 12px 15px;
+    }
+    
+    .message-input-container {
+        padding: 12px 15px;
+    }
+    
+    .admin-header {
+        padding: 12px 15px;
+    }
+    
+    .content-section {
+        padding: 15px;
+    }
+    
+    .ban-content {
+        padding: 20px 15px;
+    }
+    
+    .ban-info {
+        padding: 15px;
+    }
+}

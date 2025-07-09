@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Chat - User</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="user-container">
+        <!-- Username Modal -->
+        <div id="username-modal" class="modal">
+            <div class="modal-content animate-slide-up">
+                <h2>Enter Your Username</h2>
+                <input type="text" id="username-input" placeholder="Choose a username">
+                <button id="submit-username" class="btn">Join Chat</button>
+            </div>
+        </div>
+
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="loading-screen">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <div class="loading-dots">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <p>Loading messages...</p>
+            </div>
+        </div>
+
+        <!-- Chat Interface -->
+        <div class="chat-interface hidden">
+            <header class="chat-header">
+                <div class="header-content">
+                    <h2 id="group-name">Group Chat</h2>
+                    <p id="online-status">Online</p>
+                </div>
+                <button id="refresh-btn" class="icon-btn"><i class="fas fa-sync-alt"></i></button>
+            </header>
+
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will be loaded here -->
+            </div>
+
+            <div class="message-input-container">
+                <input type="text" id="message-input" placeholder="Type a message...">
+                <button id="send-btn" class="btn send-btn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is banned
+            const savedUsername = localStorage.getItem('chatUsername');
+            if (savedUsername) {
+                checkIfBanned(savedUsername);
+            } else {
+                document.getElementById('username-modal').style.display = 'flex';
+            }
+
+            // Username submission
+            document.getElementById('submit-username').addEventListener('click', function() {
+                const username = document.getElementById('username-input').value.trim();
+                if (username) {
+                    checkIfBanned(username);
+                }
+            });
+
+            function checkIfBanned(username) {
+                firebase.database().ref('bannedUsers/' + username).once('value').then(snapshot => {
+                    const banData = snapshot.val();
+                    if (banData) {
+                        // Check if ban is permanent or temporary
+                        if (banData.permanent || new Date(banData.until) > new Date()) {
+                            // Redirect to ban page
+                            window.location.href = `ban.html?username=${encodeURIComponent(username)}`;
+                        } else {
+                            // Ban expired, remove from banned list
+                            firebase.database().ref('bannedUsers/' + username).remove();
+                            proceedWithLogin(username);
+                        }
+                    } else {
+                        proceedWithLogin(username);
+                    }
+                });
+            }
+
+            function proceedWithLogin(username) {
+                localStorage.setItem('chatUsername', username);
+                document.getElementById('username-modal').style.display = 'none';
+                document.getElementById('loading-screen').style.display = 'flex';
+                setTimeout(() => {
+                    document.getElementById('loading-screen').style.display = 'none';
+                    document.querySelector('.chat-interface').classList.remove('hidden');
+                    initChat(username);
+                }, 2000);
+            }
+
+            // Refresh button
+            document.getElementById('refresh-btn').addEventListener('click', function() {
+                refreshChat();
+                this.classList.add('rotate');
+                setTimeout(() => {
+                    this.classList.remove('rotate');
+                }, 500);
+            });
+        });
+
+        function initChat(username) {
+            // Load group name
+            firebase.database().ref('settings/groupName').on('value', (snapshot) => {
+                const groupName = snapshot.val() || 'Group Chat';
+                document.getElementById('group-name').textContent = groupName;
+            });
+
+            // Load chat status
+            firebase.database().ref('settings/chatStatus').on('value', (snapshot) => {
+                const status = snapshot.val();
+                if (status === 'closed') {
+                    document.getElementById('message-input').disabled = true;
+                    document.getElementById('message-input').placeholder = 'Chat is currently closed';
+                    document.getElementById('online-status').textContent = 'Offline';
+                    document.getElementById('online-status').style.color = '#ff6b6b';
+                } else {
+                    document.getElementById('message-input').disabled = false;
+                    document.getElementById('message-input').placeholder = 'Type a message...';
+                    document.getElementById('online-status').textContent = 'Online';
+                    document.getElementById('online-status').style.color = '#51cf66';
+                }
+            });
+
+            // Load messages
+            loadMessages();
+
+            // Send message functionality
+            document.getElementById('send-btn').addEventListener('click', sendMessage);
+            document.getElementById('message-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value.trim();
+            const username = localStorage.getItem('chatUsername');
+            
+            if (message && username) {
+                const timestamp = Date.now();
+                firebase.database().ref('messages/' + timestamp).set({
+                    username: username,
+                    message: message,
+                    timestamp: timestamp
+                });
+                messageInput.value = '';
+            }
+        }
+
+        function loadMessages() {
+            firebase.database().ref('messages').orderByChild('timestamp').on('value', (snapshot) => {
+                const messages = [];
+                snapshot.forEach((childSnapshot) => {
+                    const msg = childSnapshot.val();
+                    msg.id = childSnapshot.key;
+                    messages.push(msg);
+                });
+                
+                displayMessages(messages);
+            });
+        }
+
+        function displayMessages(messages) {
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.innerHTML = '';
+            
+            messages.forEach((msg, index) => {
+                if (msg.deleted) {
+                    const deletedMsg = document.createElement('div');
+                    deletedMsg.classList.add('message', 'deleted-message');
+                    deletedMsg.innerHTML = `
+                        <div class="message-content">
+                            <p class="deleted-text"><i class="fas fa-trash"></i> Message deleted by admin</p>
+                        </div>
+                    `;
+                    chatMessages.appendChild(deletedMsg);
+                    return;
+                }
+                
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+                if (msg.username === localStorage.getItem('chatUsername')) {
+                    messageElement.classList.add('sent');
+                } else {
+                    messageElement.classList.add('received');
+                }
+                
+                // Add animation delay for each message
+                messageElement.style.animationDelay = `${index * 0.1}s`;
+                
+                messageElement.innerHTML = `
+                    <div class="message-content">
+                        <span class="message-sender">${msg.username}</span>
+                        <p class="message-text">${msg.message}</p>
+                        <span class="message-time">${formatTime(msg.timestamp)}</span>
+                    </div>
+                `;
+                
+                chatMessages.appendChild(messageElement);
+            });
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function refreshChat() {
+            document.getElementById('chat-messages').classList.add('refreshing');
+            setTimeout(() => {
+                loadMessages();
+                document.getElementById('chat-messages').classList.remove('refreshing');
+            }, 500);
+        }
+
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+    </script>
+</body>
+</html>

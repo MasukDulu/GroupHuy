@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Banned</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="ban-container">
+        <div class="ban-content animate-slide-up">
+            <div class="ban-icon">
+                <i class="fas fa-ban"></i>
+            </div>
+            <h1>ACCOUNT SUSPENDED</h1>
+            <div class="ban-info">
+                <p><strong>Username:</strong> <span id="banned-username"></span></p>
+                <p><strong>Banned Until:</strong> <span id="banned-until"></span></p>
+                <p><strong>Admin Message:</strong> <span id="admin-message"></span></p>
+            </div>
+            <div class="ban-actions" id="ban-actions">
+                <!-- Permanent ban shows logout, temporary ban shows countdown -->
+            </div>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const username = urlParams.get('username');
+            
+            if (username) {
+                document.getElementById('banned-username').textContent = username;
+                
+                // Check ban status from Firebase
+                firebase.database().ref('bannedUsers/' + username).once('value').then(snapshot => {
+                    const banData = snapshot.val();
+                    if (banData) {
+                        if (banData.permanent) {
+                            document.getElementById('banned-until').textContent = 'Permanent';
+                            document.getElementById('ban-actions').innerHTML = `
+                                <button id="logout-btn" class="btn">Logout</button>
+                            `;
+                        } else {
+                            const bannedUntil = new Date(banData.until);
+                            document.getElementById('banned-until').textContent = bannedUntil.toLocaleString();
+                            document.getElementById('ban-actions').innerHTML = `
+                                <div class="countdown">
+                                    <p>Time remaining: <span id="countdown-timer"></span></p>
+                                </div>
+                            `;
+                            
+                            // Start countdown
+                            updateCountdown(bannedUntil);
+                            setInterval(() => updateCountdown(bannedUntil), 1000);
+                        }
+                        
+                        if (banData.message) {
+                            document.getElementById('admin-message').textContent = banData.message;
+                        } else {
+                            document.getElementById('admin-message').textContent = 'No message provided';
+                        }
+                    } else {
+                        // If no ban data found, redirect to login
+                        window.location.href = 'us.html';
+                    }
+                });
+                
+                // Logout button
+                document.addEventListener('click', function(e) {
+                    if (e.target.id === 'logout-btn') {
+                        localStorage.removeItem('chatUsername');
+                        window.location.href = 'index.html';
+                    }
+                });
+            } else {
+                window.location.href = 'index.html';
+            }
+            
+            function updateCountdown(endTime) {
+                const now = new Date();
+                const diff = endTime - now;
+                
+                if (diff <= 0) {
+                    document.getElementById('countdown-timer').textContent = 'Ban expired';
+                    // Remove from banned list
+                    firebase.database().ref('bannedUsers/' + username).remove();
+                    // Redirect after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = 'us.html';
+                    }, 3000);
+                    return;
+                }
+                
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                let countdownText = '';
+                if (days > 0) countdownText += `${days}d `;
+                if (hours > 0 || days > 0) countdownText += `${hours}h `;
+                if (minutes > 0 || hours > 0 || days > 0) countdownText += `${minutes}m `;
+                countdownText += `${seconds}s`;
+                
+                document.getElementById('countdown-timer').textContent = countdownText;
+            }
+        });
+    </script>
+</body>
+</html>
